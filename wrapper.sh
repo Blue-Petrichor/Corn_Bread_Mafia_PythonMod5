@@ -36,8 +36,8 @@ help_prompt()
 usage()
 {
 	echo "Try:"
-	echo "(-f <user name>) (-t <password>) (-e <email>)  (-u <begDate>)  (-p <endDate>)"
-	echo "     required         required      required        required        required  "
+	echo "(-f <begDate>) (-t <endDate>) (-e <email>)  (-u <user name>)  (-p <password>)"
+	echo "     required       required       required      required          required  "
 	echo " " 
 	exit 1
 }
@@ -151,54 +151,13 @@ fi
 
 
 #####################  Main shell execution  ##################################################
-#bash wget.sh $year
+python3 create_report.py $begDate $endDate
 
-#if [[ $? -eq 0 ]]
-#then
-#	echo "Expanding..."
-#	bash expand.sh $year
-#fi
-
-#if [[ $? -eq 0 ]]
-#then 
-#	echo ""
-#	echo "Filtering data..."
-#	bash filterData.sh temp
-#fi
-
-#if [[ $? -eq 0 ]]
-#then
-#	echo "Compressing filtered data..."
-#	bash compress.sh temp
-#fi
-
-#if [[ $? -eq 0 && -z $user && -z $pass ]]
-#then 
-#	echo ""
-#	echo "Uploading to ftp server..."
-#	echo "Succesfully transfered file to FTP 137.190.19.90 server"
-#	echo "No email was entered, no email confirmation sent"
-#	bash ftpAccess.sh MOCK_DATA_FILTER_*.zip $user $pass
-#fi
-
-#if [[ $? -eq 0 && ! -z $user && ! -z $pass ]]
-#then 
-#	user="anonymous"
-#	pass="password"
-#	echo ""
-#	echo "Uploading to ftp server..."
-#	echo "Succesfully transfered file to FTP 137.190.19.90 server"
-#	mail -s "Subject: Successful FTP email confirmatin"  $email < email_subject.txt
-#	echo "Sending verifications email to $email"
-#	bash ftpAccess.sh MOCK_DATA_FILTER_*.zip $user $pass
-#fi
-
-#if [[ $? -eq 0 ]]
-#then
-#	echo ""
-#	echo "Cleaning up..."
-#	bash cleanup.sh
-#fi
+if [[ $? -eq 0 ]]
+then
+	echo ""
+	echo "Getting file and passing Args..."
+fi
 
 exit 0
 
