@@ -51,15 +51,15 @@ email_usage()
 # Function if begin date is not valid
 begDateUsage()
 {
-	echo "Invalid length or format."
+	echo "Invalid length or format for begin search date."
 	echo "Usage For Begin Date: YYYYMMDD "
 	echo " "
 	exit 1
 }
-# Function if begin date is not valid
+# Function if end date is not valid
 endDateUsage()
 {
-	echo "Invalid length or format."
+	echo "Invalid length or format for end search date."
 	echo "Usage For End Date: YYYYMMDD "
 	echo " "
 	exit 1
@@ -93,7 +93,7 @@ then
 			t) 
 				endDate=$OPTARG
 				# Check if is empty and is lengh of 8, is an integer value, and non-negative
-				if [[ ! -z $3 && ${#4} == 8 && $4 == ?(-)+([1-9]) ]]
+				if [[ ! -z $3 && ${#4} == 8 && $4 == ?(-)+([0-9]) ]]
 				then
 					echo "Ending search date has been verified: "
 				else
@@ -156,7 +156,8 @@ python3 create_report.py $begDate $endDate
 if [[ $? -eq 0 ]]
 then
 	echo ""
-	echo "Getting file and passing Args..."
+	echo "Need to change this in the main but for now the Date args have been passed ..."
+	echo "This is line 154 - 160"
 fi
 
 exit 0
