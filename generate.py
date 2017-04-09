@@ -30,13 +30,13 @@ def query_db(begDate, endDate):
     AND trans.trans_date <= DATETIME({1});'.format(begDate, endDate)
 
 
-    cur = db.open_db('hw8SQLite.db')
+    conn, cur = db.open_db('hw8SQLite.db')
     recs = db.query_db(sqlString, cur)
 
     for row in recs:
         print(row)
 
-
+    db.close_db(conn, cur)
 
 def main():
     """

@@ -23,7 +23,7 @@ def open_db(dbname):
         print("connected to DB")
 
     cur = conn.cursor()
-    return cur
+    return conn, cur
 
 
 def query_db(sqlString, cur):
@@ -41,6 +41,17 @@ def query_db(sqlString, cur):
     return recs
 
 
+def close_db(conn, cur):
+    """
+    Closes a database connect and it's cursor
+    Args:
+        conn -> database connection
+        cur -> cursor to a database
+    """
+    cur.close()
+    conn.close()
+    print('Successfully closed DB connection')
+
 def main():
     """
     Main for testing module
@@ -55,7 +66,7 @@ def main():
 
 
     try:
-        cur = open_db(sys.argv[1])
+        conn, cur = open_db(sys.argv[1])
     except IndexError:
         print("Invalid arguments")
         print("USAGE: python3 DBAcess.py <dbname>")
@@ -68,6 +79,8 @@ def main():
 
     for row in recs:
         print(row)
+
+    close_db(conn, cur)
 
 if __name__ == "__main__":
     main()
