@@ -151,10 +151,10 @@ fi
 
 
 #####################  Main shell execution  ##################################################
-python3 create_report.py $begDate $endDate
-
-if [[ $? -eq 0 ]]
+# Run create file only if optargs are equal to zero and FTPpassword has been entered.
+if [[ $FTPpassword != "" && $? -eq 0 ]]
 then
+	python3 create_report.py $begDate $endDate $email
 	echo ""
 	echo "Need to change this in the main but for now the Date args have been passed ..."
 	echo "This is line 154 - 160"
