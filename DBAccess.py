@@ -25,6 +25,16 @@ def open_db(dbname):
     cur = conn.cursor()
     return cur
 
+
+def query_db(sqlString, cur):
+
+    cur.execute(sqlString)
+    recs = cur.fetchall()
+
+    for row in recs:
+        print(row)
+
+
 def main():
     """
     Main for testing module
@@ -38,8 +48,8 @@ def main():
         print("USAGE: python3 DBAcess.py <dbname>")
         exit(-1)
 
-    type(cur)
-
+    sqlString = 'SELECT * FROM products'
+    query_db(sqlString, cur)
 
 if __name__ == "__main__":
     main()
