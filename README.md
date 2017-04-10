@@ -15,6 +15,8 @@ TODO LIST
 
 5. Make sure all python scripts and the README.md are adequately documented. 
 
+6. The wrapper.sh file should not have any coding in it. All the coding should be done in 'create\_report.py'. Wrapper.sh should only take command line inputs then it should defer all args to 'create\_report.py'.
+
 #############################################
 
 
