@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 from ftplib import FTP
 
 
@@ -18,7 +18,7 @@ def main():
     call_ftp()
 
 
-if __name__ == "msin__":
+if __name__ == "__main__":
     # Call main function
     main()
     exit(0)
