@@ -7,6 +7,17 @@ into a fixed length format
 import DBAccess as db
 
 
+def build_fixed_string(s):
+    """
+    Takes list as input and builds fixed string out of it
+    Args:
+        s -> input list to build string out of
+    Returns:
+        string
+    """
+    pass
+
+
 def query_db(begDate, endDate):
     """
     Opens a connection to the DB and queries based on the given date string
