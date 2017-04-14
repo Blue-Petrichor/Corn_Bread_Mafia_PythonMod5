@@ -66,72 +66,25 @@ endDateUsage()
 }
 ################ END HELP FUNCTIONS ##############################################################
 
-#check for the --help option for first param was entered
-if [[ $1 == "--help" ]]
-then
-	usage
-fi
-
 ##################### Getopts and  error handling  ###############################################
 
-if [[ $1 != --help && ! -z "$2" && ! -z "$4" && ! -z "$6" && ! -z "$8" && ! -z "$10" ]]
-then
-	while getopts ":f:t:e:u:p:" opt
-	do
+while getopts ":f:t:e:u:p:" opt
+    do
 		case $opt in
-			f) 
+			f)
 				begDate=$OPTARG
-				# Check if is empty and is lengh of 8, is an integer value, and non-negative
-				if [[  ! -z $1 && ${#2} == 8 && $2 == ?(-)+([0-9]) ]]
-				then 
-					echo ""
-					echo "Begin search date has been verified: "
-				else
-					begDateUsage
-				fi
-				;;
-			t) 
+                ;;
+			t)
 				endDate=$OPTARG
-				# Check if is empty and is lengh of 8, is an integer value, and non-negative
-				if [[ ! -z $3 && ${#4} == 8 && $4 == ?(-)+([0-9]) ]]
-				then
-					echo "Ending search date has been verified: "
-				else
-					endDateUsage
-				fi
-				;;
-			e)  
+                ;;
+            e)
 				email=$OPTARG
-				if [[ ! -z $5 && $6 =~ @ && $3 =~ . ]]
-				then
-					# make varible to store email for use
-					echo "$6 is an accepted email address:"
-					else
-						echo " "
-						echo "$6 is partial or missing requirements, see help below:"
-						email_usage
-				fi
-				;;
-			u) 
-				FTPuser=$OPTARG
-				# verify if the first Argument is not empty and print welcome messeage if correct.
-				user=$OPTARG
-				if [[ ! -z $7  ]]
-				then 
-					echo "Welcome $8!"
-				else
-					usage
-				fi
-				;;
-			p)  
-				FTPpassword=$OPTARG
-				# Verify if the second Argument is not empyt and print if successfully set.
-				if [[ ! -z $9 ]]
-				then 
-					echo "Password is now set: ********"
-				else
-					usage
-				fi
+                ;;
+			u)
+			    user=$OPTARG
+                ;;
+            p)
+				password=$OPTARG
 				;;
 
 			*) #send to usage function for how to enter
@@ -139,10 +92,9 @@ then
 				;;
 		esac
 	done
-fi
 
 # If empty arguments are given call help prompt
-if [[ -z "$begDate" || -z "$endDate" || -z "$email" || -z "$FTPuser" || -z "$FTPpassword" ]]
+if [[ -z "$begDate" || -z "$endDate" || -z "$email" || -z "$user" || -z "$password" ]]
 then 
 	echo ""
 	echo "Missing Argument(s) parameter(s)."
@@ -152,13 +104,25 @@ fi
 
 #####################  Main shell execution  ##################################################
 # Run create file only if optargs are equal to zero and FTPpassword has been entered.
-if [[ $FTPpassword != "" && $? -eq 0 ]]
+    echo "entering python..."
+	python3 create_report.py $begDate $endDate $email $user $password
+    #capture exit code before we accidently change it
+    code=$?
+
+if [[ $code -eq 0 ]]
 then
-	python3 create_report.py $begDate $endDate $email
-	echo ""
-	echo "Need to change this in the main but for now the Date args have been passed ..."
-	echo "This is line 154 - 160"
+    echo "exit 0"
+    exit 0
 fi
 
-exit 0
+if [[ $code -eq 1 ]]
+then
+    echo "exit 1"
+    exit 1
+fi
 
+if [[ $code -eq 2 ]]
+then
+    echo "exit 2"
+    exit 2
+fi
