@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 """
 Database acess script. Contains functions for opening a connection
-to a database and reading information from it. 
+to a database and reading information from it.
 USAGE: python3 DBAcess.py <dbname>
 """
 
 import sys
 import sqlite3
+
 
 def open_db(dbname):
     """
@@ -16,7 +17,6 @@ def open_db(dbname):
     Returns:
         cursor to the DB
     """
-    
     conn = sqlite3.connect(dbname)
 
     if conn:
@@ -52,19 +52,11 @@ def close_db(conn, cur):
     conn.close()
     print('Successfully closed DB connection')
 
+
 def main():
     """
     Main for testing module
     """
-
-    #query for getting all records from the db based on trans_id
-    #SELECT trans.trans_id, trans_line.qty, products.prod_desc FROM trans JOIN trans_line, products WHERE trans.trans_id = trans_line.trans_id AND trans_line.prod_num = products.prod_num;
-    
-
-    #query for getting records between date ranges
-    #SELECT * FROM trans where trans_date >= DATETIME('DATE') AND trans_date <= DATETIME('DATE');
-
-
     try:
         conn, cur = open_db(sys.argv[1])
     except IndexError:
@@ -72,9 +64,14 @@ def main():
         print("USAGE: python3 DBAcess.py <dbname>")
         exit(-1)
 
+    sqlString = 'SELECT trans.trans_id, trans.trans_date,  trans.card_num, \
+        trans_line.qty, products.prod_desc \
+        FROM trans \
+        JOIN trans_line, products \
+        WHERE trans.trans_id = trans_line.trans_id \
+        AND trans_line.prod_num = products.prod_num'
 
-    sqlString = 'SELECT trans.trans_id, trans.trans_date,  trans.card_num, trans_line.qty, products.prod_desc FROM trans JOIN trans_line, products WHERE trans.trans_id = trans_line.trans_id AND trans_line.prod_num = products.prod_num'
-    #sqlString = 'SELECT * FROM products'
+    # sqlString = 'SELECT * FROM products'
     recs = query_db(sqlString, cur)
 
     for row in recs:
@@ -85,4 +82,3 @@ def main():
 if __name__ == "__main__":
     main()
     exit(0)
-

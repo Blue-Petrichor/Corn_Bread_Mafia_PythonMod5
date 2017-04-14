@@ -1,8 +1,8 @@
 #!/user/bin/env python3
 import sys
-import re
 from datetime import datetime
-import argparse
+import compileData
+
 
 def Email_customer():
     """
@@ -11,10 +11,9 @@ def Email_customer():
     """
 
     # Add email header: "The create_report program exit with code -2"
-    # add the code for email confirmation, need to pass email in as an argument for email as Argv[3]
-    email_cust = sys.argv[3]
+    # add the code for email confirmation,
+    # need to pass email in as an argument for email as Argv[3]
     # call the email txt file for the header
-    mail -s "The Create_report program exit with code -2" email_cust
 
 
 def convert_date():
@@ -25,38 +24,38 @@ def convert_date():
     endDateInput = sys.argv[2]
 
     bd = datetime.strptime(begDateInput, "%Y%m%d")
-    Begin_Datetime =  bd.strftime("%Y-%m-%d HH:mm:ss")
+    Begin_Datetime = bd.strftime("%Y-%m-%d HH:mm:ss")
     # Need to add exit code -1 when bad input of date occures
 
-    
     ed = datetime.strptime(endDateInput, "%Y%m%d")
     End_Datetime = ed.strftime("%Y-%m-%d HH:mm:ss")
     # Need to add exit code -1 when bad input of date occures
-    
 
     # If statment for invalid date range for search
     # Call the Email_customer function
 
-    print ("Name of the script is", sys.argv[0])
-    print ("Number of args is ", len(sys.argv))
-    print ("The args are: ", str(sys.argv))
+    print("Name of the script is", sys.argv[0])
+    print("Number of args is ", len(sys.argv))
+    print("The args are: ", str(sys.argv))
 
-    #print ("This is the d string date:, ", d)
-    print ("Beginning date conversion is: ", Begin_Datetime)
-    print ("Ending date conversion is: ", End_Datetime)
-    
+    # print ("This is the d string date:, ", d)
+    print("Beginning date conversion is: ", Begin_Datetime)
+    print("Ending date conversion is: ", End_Datetime)
+
 
 def main():
     """
     Main function
     """
-    convert_date()
-
+    # convert_date()
+    strs = compileData.query_db('\'2014-01-01 00:00:00\'',
+                                '\'2018-01-01 00:00:00\'')
+    for x in strs:
+        # print(len(x))
+        print(len(x))
     pass
 
 if __name__ == "__main__":
-    #call main fuction
+    # call main fuction
     main()
-
     exit(0)
-

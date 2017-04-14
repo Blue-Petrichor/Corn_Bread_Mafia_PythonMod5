@@ -8,17 +8,6 @@ import DBAccess as db
 from datetime import datetime
 
 
-def build_fixed_string(s):
-    """
-    Takes two lists as input and builds fixed string out of them
-    Args:
-        s -> input list to build string out of
-    Returns:
-        string
-    """
-    pass
-
-
 def build_tran_string(tranls):
     """
     Sets up the transinfo for fixed length format
@@ -51,8 +40,9 @@ def build_prod_string(prodls):
 
     prodStr = ''
 
-    if len(prodls) < 3:
-        return
+    #if len(prodls) < 3:
+        # Return default string since no product exists
+     #   return ['00', '000000', '          ']
 
     # Create right justified string with 0's as padding
     prodStr += str(int(prodls[0])).rjust(2, '0')
@@ -67,7 +57,7 @@ def query_by_id(id, cur):
     Args:
         id -> the id of the transaction
     Returns:
-        string of returned rows
+        list of returned records
     """
 
     sqlProdInfo = 'SELECT trans_line.qty, trans_line.amt, products.prod_desc \
@@ -76,12 +66,8 @@ def query_by_id(id, cur):
         WHERE trans_line.prod_num = products.prod_num \
         AND trans_id = {};'.format(id)
 
-    prod_info = []
-
     prod_recs = db.query_db(sqlProdInfo, cur)
-    for row in prod_recs:
-        prod_info.append(build_prod_string(row))
-    return prod_info
+    return prod_recs
 
 
 def query_db(begDate, endDate):
@@ -91,7 +77,7 @@ def query_db(begDate, endDate):
     Args:
         dateString -> the date range to find records in
     Returns:
-        no idea yet
+       list of fixed length strings by id of the database
     """
 
     sqlTransID = 'SELECT trans_id, trans_date, card_num, total FROM trans \
@@ -101,22 +87,40 @@ def query_db(begDate, endDate):
     conn, cur = db.open_db('hw8SQLite.db')
     recs = db.query_db(sqlTransID, cur)
 
+    fixed_list = []
+    tranStr = ''
+
     for tranID in recs:
         # Create empty list for fixed string info
-        fixed = []
-        fixed.append(tranID[0])
-        fixed.append(tranID[1])
-        fixed.append(tranID[2])
+        tran_info = []
+        tran_info.append(tranID[0])
+        tran_info.append(tranID[1])
+        tran_info.append(tranID[2])
 
-        tranStr = build_tran_string(fixed)
-        prodls = query_by_id(tranID[0], cur)
+        # Get the fixed string for the first three fields (id, date, card)
+        tranStr = build_tran_string(tran_info)
 
-        for prod in prodls:
+        # Get the products by id
+        prod_recs = query_by_id(tranID[0], cur)
+
+        prod_info = []
+        for row in prod_recs:
+            prod_info.append(build_prod_string(row))
+
+        while len(prod_info) < 3:
+            # string must be 83 char long so fill with dummy data
+            # we'll let build_prod_string fill out blank info
+            # by passing it a list [0, 0, ' ']
+            prod_info.append(build_prod_string([0, 0, ' ']))
+
+
+        for prod in prod_info:
             tranStr += prod
 
-        tranStr += str(tranID[2]).rjust(6, '0')
-        print(tranStr)
+        tranStr += str(int(tranID[3]* 100)).rjust(6, '0')
+        fixed_list.append(tranStr)
     db.close_db(conn, cur)
+    return fixed_list
 
 
 def main():
