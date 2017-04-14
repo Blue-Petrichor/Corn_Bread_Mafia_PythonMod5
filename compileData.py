@@ -108,11 +108,14 @@ def query_db(begDate, endDate):
         fixed.append(tranID[1])
         fixed.append(tranID[2])
 
-        tranls = build_tran_string(fixed)
+        tranStr = build_tran_string(fixed)
         prodls = query_by_id(tranID[0], cur)
-        print(tranls)
-        print(prodls)
 
+        for prod in prodls:
+            tranStr += prod
+
+        tranStr += str(tranID[2]).rjust(6, '0')
+        print(tranStr)
     db.close_db(conn, cur)
 
 
