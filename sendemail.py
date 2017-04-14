@@ -20,7 +20,7 @@ def send_email(dest, textfile, begDate=0, endDate=1):
         # Create a text/plain message
         msg = MIMEText(fp.read().format(begDate, endDate))
 
-        msg['Subject'] = 'stop blocking this dammit! >:('
+        msg['Subject'] = 'text from cmd input'
         msg['From'] = 'hw8Email@gmail.com'
         msg['To'] = dest
 
