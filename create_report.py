@@ -51,6 +51,7 @@ def main():
     strs = compileData.query_db('\'2014-01-01 00:00:00\'',
                                 '\'2018-01-01 00:00:00\'')
     for x in strs:
+        # print(len(x))
         print(len(x))
     pass
 
