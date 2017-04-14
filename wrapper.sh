@@ -70,28 +70,27 @@ endDateUsage()
 
 while getopts ":f:t:e:u:p:" opt
     do
-		case $opt in
-			f)
-				begDate=$OPTARG
+        case $opt in
+            f)
+                begDate=$OPTARG
                 ;;
-			t)
-				endDate=$OPTARG
+            t)
+                endDate=$OPTARG
                 ;;
             e)
-				email=$OPTARG
+                email=$OPTARG
                 ;;
-			u)
-			    user=$OPTARG
+            u)
+                user=$OPTARG
                 ;;
             p)
-				password=$OPTARG
-				;;
-
-			*) #send to usage function for how to enter
-				usage
-				;;
-		esac
-	done
+                password=$OPTARG
+                ;;
+            *) #send to usage function for how to enter
+                usage
+                ;;
+        esac
+    done
 
 # If empty arguments are given call help prompt
 if [[ -z "$begDate" || -z "$endDate" || -z "$email" || -z "$user" || -z "$password" ]]
