@@ -1,8 +1,17 @@
 #!/usr/bin/env python3
+"""
+Performs FTP actions
+"""
 from ftplib import FTP
 
 
 def call_ftp():
+    """
+    Transfer files
+    Args:
+
+    Returns:
+    """
     ftp = FTP('137.190.19.90')
     ftp.login()
     ftp.cwd("MockData")
