@@ -40,8 +40,9 @@ def build_prod_string(prodls):
 
     prodStr = ''
 
-    if len(prodls) < 3:
-        return
+    #if len(prodls) < 3:
+        # Return default string since no product exists
+     #   return ['00', '000000', '          ']
 
     # Create right justified string with 0's as padding
     prodStr += str(int(prodls[0])).rjust(2, '0')
@@ -106,10 +107,17 @@ def query_db(begDate, endDate):
         for row in prod_recs:
             prod_info.append(build_prod_string(row))
 
+        while len(prod_info) < 3:
+            # string must be 83 char long so fill with dummy data
+            # we'll let build_prod_string fill out blank info
+            # by passing it a list [0, 0, ' ']
+            prod_info.append(build_prod_string([0, 0, ' ']))
+
+
         for prod in prod_info:
             tranStr += prod
 
-        tranStr += str(tranID[2]).rjust(6, '0')
+        tranStr += str(int(tranID[3]* 100)).rjust(6, '0')
         fixed_list.append(tranStr)
     db.close_db(conn, cur)
     return fixed_list
