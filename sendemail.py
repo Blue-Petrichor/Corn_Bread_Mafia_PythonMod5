@@ -9,7 +9,7 @@ from email.mime.text import MIMEText
 # the text file contains only ASCII characters.
 
 
-def send_email(dest, textfile, begDate=0, endDate=1):
+def send_email(dest, textfile, subStr, begDate=0, endDate=1):
     """
     Sends an email containing a plain textfile as the body
     Args:
@@ -20,7 +20,7 @@ def send_email(dest, textfile, begDate=0, endDate=1):
         # Create a text/plain message
         msg = MIMEText(fp.read().format(begDate, endDate))
 
-        msg['Subject'] = 'text from cmd input'
+        msg['Subject'] = subStr
         msg['From'] = 'hw8Email@gmail.com'
         msg['To'] = dest
 
