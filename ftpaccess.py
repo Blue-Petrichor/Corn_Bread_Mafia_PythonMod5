@@ -3,9 +3,9 @@
 Performs FTP actions
 """
 from ftplib import FTP
+from ftplib import error_perm
 
-
-def call_ftp():
+def upload_to_ftp(upFile, user='anonymous', password='anonymous@'):
     """
     Transfer files
     Args:
@@ -13,10 +13,19 @@ def call_ftp():
     Returns:
     """
     ftp = FTP('137.190.19.90')
-    ftp.login()
-    ftp.cwd("MockData")
-    ftp.storlines("STOR test.txt", open("test.txt", "rb"))
-    ftp.retrlines('LIST')
+    ftp.login(user, password)
+
+    if user == 'anonymous':
+        ftp.cwd("MockData")
+    else:
+        ftp.cwd("/srv/ftp/MockData/")
+
+
+    try:
+        ftp.storlines("STOR {}".format(upFile), open(upFile, "rb"))
+        ftp.retrlines('LIST')
+    except error_perm:
+        print('That file already exists or you dont have permission to write that file.')
     ftp.quit()
 
 
@@ -24,7 +33,7 @@ def main():
     """
     Main function
     """
-    call_ftp()
+    upload_to_ftp('test.txt')
 
 
 if __name__ == "__main__":
