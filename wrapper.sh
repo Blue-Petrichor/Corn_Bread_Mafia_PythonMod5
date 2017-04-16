@@ -98,6 +98,7 @@ then
 	echo ""
 	echo "Missing Argument(s) parameter(s)."
 	help_prompt
+    exit 1
 fi
 
 
