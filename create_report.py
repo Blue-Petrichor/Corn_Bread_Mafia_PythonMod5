@@ -2,58 +2,75 @@
 import sys
 from datetime import datetime
 import compileData
+import sendemail
 
 
-def Email_customer():
+def make_report(recs, begDate, endDate):
     """
-    Email the customer if the date range Beg_date and End_date do not have
-    has no transaction availiable
+    Takes a list as input and makes a .dat file
+    Args:
+        recs -> list of things
     """
+    fp = open("company_trans_{0}_{1}.dat".format(begDate, endDate), 'w')
+    for item in recs:
+        fp.write(item)
+        fp.write('\n')
+    fp.close()
 
-    # Add email header: "The create_report program exit with code -2"
-    # add the code for email confirmation,
-    # need to pass email in as an argument for email as Argv[3]
-    # call the email txt file for the header
 
-
-def convert_date():
+def convert_date(begDate, endDate):
     """
     Get dates and format for input arguments
+    Args:
+        begDate -> begining date for date range
+        endDate -> end date for date range
+    Returns:
+        tuple of two datetime objects
     """
-    begDateInput = sys.argv[1]
-    endDateInput = sys.argv[2]
-
-    bd = datetime.strptime(begDateInput, "%Y%m%d")
-    Begin_Datetime = bd.strftime("%Y-%m-%d HH:mm:ss")
+    bd = datetime.strptime(begDate, "%Y%m%d")
+    begin_datetime = bd.strftime("%Y-%m-%d 00:00:00")
     # Need to add exit code -1 when bad input of date occures
 
-    ed = datetime.strptime(endDateInput, "%Y%m%d")
-    End_Datetime = ed.strftime("%Y-%m-%d HH:mm:ss")
+    ed = datetime.strptime(endDate, "%Y%m%d")
+    end_datetime = ed.strftime("%Y-%m-%d 23:59:59")
     # Need to add exit code -1 when bad input of date occures
 
     # If statment for invalid date range for search
     # Call the Email_customer function
 
-    print("Name of the script is", sys.argv[0])
-    print("Number of args is ", len(sys.argv))
-    print("The args are: ", str(sys.argv))
-
     # print ("This is the d string date:, ", d)
-    print("Beginning date conversion is: ", Begin_Datetime)
-    print("Ending date conversion is: ", End_Datetime)
+    print("Beginning date conversion is: ", begin_datetime)
+    print("Ending date conversion is: ", end_datetime)
+    return begin_datetime, end_datetime
 
 
 def main():
     """
     Main function
     """
-    # convert_date()
-    strs = compileData.query_db('\'2014-01-01 00:00:00\'',
-                                '\'2018-01-01 00:00:00\'')
+    try:
+        begDate, endDate = convert_date(sys.argv[1], sys.argv[2])
+    except ValueError:
+        print("Bad date format")
+        exit(1)
+
+    # add ' to date strings for query to work
+    begDate = '\'' + begDate + '\''
+    endDate = '\'' + endDate + '\''
+
+    strs = compileData.query_db(begDate, endDate)
+
+    if len(strs) == 0:
+        print("No records found. Exiting...")
+        exit(2)
+
     for x in strs:
+        print(x)
         # print(len(x))
-        print(len(x))
-    pass
+
+    make_report(strs, sys.argv[1], sys.argv[2])
+    sendemail.send_email(sys.argv[3], 'email_templates/Success.txt', begDate,
+                         endDate)
 
 if __name__ == "__main__":
     # call main fuction
